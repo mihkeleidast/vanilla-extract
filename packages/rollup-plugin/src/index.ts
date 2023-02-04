@@ -13,11 +13,13 @@ import { posix } from 'path';
 const { relative, normalize, dirname } = posix;
 
 interface Options {
+  test?: RegExp;
   identifiers?: IdentifierOption;
   cwd?: string;
   esbuildOptions?: CompileOptions['esbuildOptions'];
 }
 export function vanillaExtractPlugin({
+  test = cssFileFilter,
   identifiers,
   cwd = process.cwd(),
   esbuildOptions,
@@ -31,7 +33,7 @@ export function vanillaExtractPlugin({
       emittedFiles.clear();
     },
     async transform(_code, id) {
-      if (!cssFileFilter.test(id)) {
+      if (!test.test(id)) {
         return null;
       }
 
